@@ -1,0 +1,25 @@
+const disableScroll = () => {
+  // document.body.style.overflow = "hidden";
+  document.body.dataset.scrollY = window.scrollY;
+
+  const scrollWidth = window.innerWidth - document.body.offsetWidth;
+
+  document.body.style.cssText = `
+    overflow: hidden;
+    position: fixed;
+    top: -${window.scrollY}px;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    padding-right: ${scrollWidth}px;
+  `;
+
+  console.log("window.innerWidth: ", window.innerWidth);
+  console.log("document.body.offsetWidth: ", document.body.offsetWidth);
+};
+const enableScroll = () => {
+  document.body.style.cssText = "";
+  window.scroll({
+    top: document.body.dataset.scrollY,
+  });
+};
