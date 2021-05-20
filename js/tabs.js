@@ -12,7 +12,6 @@ for (const tab of tabsHandlerElems) {
       }
     });
     tabsFieldElems.forEach((item) => {
-      console.log(item.dataset.tabsField);
       if (item.dataset.tabsField === tab.dataset.tabsHandler) {
         item.classList.remove("hidden");
       } else {
@@ -20,7 +19,6 @@ for (const tab of tabsHandlerElems) {
       }
     });
     tabsTitleElems.forEach((item) => {
-      console.log(item.dataset.tabsField);
       if (item.dataset.tabsTitle === tab.dataset.tabsHandler) {
         item.classList.remove("hidden");
       } else {
