@@ -1,4 +1,5 @@
 const server = "https://jsonplaceholder.typicode.com/posts";
+const submitButton = document.querySelector(".form__button");
 
 const sendData = (data, callback, falseCallback) => {
   const request = new XMLHttpRequest();
@@ -24,21 +25,45 @@ const formHandler = (form) => {
     e.preventDefault();
     const data = {};
 
-    for (const { name, value } of form.elements) {
+    const smallElem = document.createElement("small");
+
+    for (const { name, value, classList } of form.elements) {
+      console.log(value);
       if (name) {
         data[name] = value;
       }
+      if (
+        (classList.contains("input") && value === "") ||
+        (classList.contains("input") && !/\S/.test(value))
+      ) {
+        console.log(/\S/.test(value));
+        smallElem.innerHTML = "Все поля должны быть заполнены!";
+        form.append(smallElem);
+        smallElem.style.color = "red";
+        return;
+      }
     }
+
     sendData(
       JSON.stringify(data),
       (id) => {
-        alert("Ваша заявка №" + id + "!\nВ ближайшее время мы с вами свяжемся");
+        smallElem.innerHTML =
+          "Ваша заявка №" + id + "!<br>В ближайшее время мы с вами свяжемся";
+        smallElem.style.color = "green";
+        form.append(smallElem);
+        submitButton.disabled = true;
+
         console.log(data);
+        setTimeout(() => {
+          smallElem.innerHTML = "";
+          submitButton.disabled = false;
+        }, 5000);
       },
       (error) => {
-        alert(
-          "К сожалению произошли технические неполадки. Попробуйте отправить заявку позже"
-        );
+        smallElem.innerHTML =
+          "К сожалению произошли технические неполадки.<br>Попробуйте отправить заявку позже";
+        smallElem.style.color = "red";
+        form.append(smallElem);
         console.log("error: ", error);
       }
     );

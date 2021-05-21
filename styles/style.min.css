@@ -565,6 +565,12 @@ a {
   height: 100%;
   z-index: 2;
 }
+
+.form__button[disabled] {
+  background: linear-gradient(93.53deg, #bbafaf 11.43%, #8d8889 80.79%);
+  color: rgba(0, 0, 0, 0.5);
+}
+
 @media (max-width: 1720px) {
   .container {
     max-width: 1400px;

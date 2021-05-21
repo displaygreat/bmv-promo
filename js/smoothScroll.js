@@ -13,7 +13,7 @@
 
 const SPEED = 0.5;
 const scrolled = (e) => {
-  e.preventDefault();
+  // e.preventDefault();
 
   const target = e.target;
 
