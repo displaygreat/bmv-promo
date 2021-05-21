@@ -32,14 +32,14 @@ const formHandler = (form) => {
       if (name) {
         data[name] = value;
       }
-      if (
-        (classList.contains("input") && value === "") ||
-        (classList.contains("input") && !/\S/.test(value))
-      ) {
-        console.log(/\S/.test(value));
+      if (classList.contains("input") && (value === "" || !/\S/.test(value))) {
         smallElem.innerHTML = "Все поля должны быть заполнены!";
         form.append(smallElem);
         smallElem.style.color = "red";
+        setTimeout(() => {
+          smallElem.innerHTML = "";
+          form.reset();
+        }, 2000);
         return;
       }
     }
