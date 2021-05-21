@@ -1,7 +1,6 @@
 const menuElem = document.querySelector(".menu");
 const humburgerElem = document.querySelector(".humburger-menu");
 const menuListItems = document.querySelectorAll(".menu-list__item");
-console.log("menuListItems: ", menuListItems);
 
 const toggleMenu = () => {
   menuElem.classList.toggle("menu-active");
