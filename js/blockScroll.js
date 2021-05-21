@@ -1,5 +1,8 @@
 const disableScroll = () => {
+  //variant 1 simple
   // document.body.style.overflow = "hidden";
+
+  //variant 2 advance
   document.body.dataset.scrollY = window.scrollY;
 
   const scrollWidth = window.innerWidth - document.body.offsetWidth;
@@ -13,9 +16,6 @@ const disableScroll = () => {
     height: 100vh;
     padding-right: ${scrollWidth}px;
   `;
-
-  console.log("window.innerWidth: ", window.innerWidth);
-  console.log("document.body.offsetWidth: ", document.body.offsetWidth);
 };
 const enableScroll = () => {
   document.body.style.cssText = "";
@@ -23,3 +23,4 @@ const enableScroll = () => {
     top: document.body.dataset.scrollY,
   });
 };
+export default { disableScroll, enableScroll };

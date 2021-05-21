@@ -1,5 +1,4 @@
 const server = "https://jsonplaceholder.typicode.com/posts";
-const submitButton = document.querySelector(".form__button");
 
 const sendData = (data, callback, falseCallback) => {
   const request = new XMLHttpRequest();
@@ -19,29 +18,42 @@ const sendData = (data, callback, falseCallback) => {
   request.send(data);
 };
 
-const formElems = document.querySelectorAll(".form");
 const formHandler = (form) => {
+  const smallElem = document.createElement("small");
+  form.append(smallElem);
+  let flag = true;
+  const buttonSubmit = form.querySelectorAll('.button[type="submit"]');
+  console.log(buttonSubmit);
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = {};
 
-    const smallElem = document.createElement("small");
-
-    for (const { name, value, classList } of form.elements) {
-      console.log(value);
+    for (const elem of form.elements) {
+      const { name, value } = elem;
       if (name) {
-        data[name] = value;
+        if (value.trim()) {
+          elem.style.border = "";
+          data[name] = value;
+        } else {
+          elem.style.cssText = `border-bottom: 2px solid red; padding-bottom: 9px;`;
+          flag = false;
+          setTimeout(() => {
+            elem.style.borderBottom = "";
+            flag = true;
+          }, 2000);
+        }
       }
-      if (classList.contains("input") && (value === "" || !/\S/.test(value))) {
-        smallElem.innerHTML = "Все поля должны быть заполнены!";
-        form.append(smallElem);
-        smallElem.style.color = "red";
-        setTimeout(() => {
-          smallElem.innerHTML = "";
-          form.reset();
-        }, 2000);
-        return;
-      }
+    }
+
+    if (!flag) {
+      smallElem.textContent = "Заполните все поля";
+      buttonSubmit.forEach((button) => (button.disabled = true));
+      setTimeout(() => {
+        smallElem.textContent = "";
+        buttonSubmit.forEach((button) => (button.disabled = false));
+      }, 2000);
+      return;
     }
 
     sendData(
@@ -50,13 +62,13 @@ const formHandler = (form) => {
         smallElem.innerHTML =
           "Ваша заявка №" + id + "!<br>В ближайшее время мы с вами свяжемся";
         smallElem.style.color = "green";
-        form.append(smallElem);
-        submitButton.disabled = true;
+        buttonSubmit.forEach((button) => (button.disabled = true));
 
         console.log(data);
+
         setTimeout(() => {
           smallElem.innerHTML = "";
-          submitButton.disabled = false;
+          buttonSubmit.forEach((button) => (button.disabled = false));
         }, 5000);
       },
       (error) => {
@@ -71,4 +83,7 @@ const formHandler = (form) => {
   });
 };
 
-formElems.forEach(formHandler);
+export default function sendForm() {
+  const formElems = document.querySelectorAll(".form");
+  formElems.forEach(formHandler);
+}

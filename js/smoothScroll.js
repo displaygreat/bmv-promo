@@ -1,3 +1,4 @@
+//variant 1 using scrollIntoView
 // const smoothScrollElems = document.querySelectorAll(
 //   'a[href^="#"]:not(a[href="#"])'
 // );
@@ -11,41 +12,44 @@
 //   });
 // });
 
-const SPEED = 0.5;
-const scrolled = (e) => {
-  // e.preventDefault();
+//variant 2 for all browsers
+function smoothScroll(SPEED = 0.5) {
+  const scrolled = (e) => {
+    const target = e.target;
 
-  const target = e.target;
+    if (target.matches('[href^="#"]')) {
+      e.preventDefault();
+      let start = 0;
 
-  if (target.matches('[href^="#"]')) {
-    let start = 0;
+      const pageY = window.pageYOffset;
 
-    const pageY = window.pageYOffset;
+      const hash = target.getAttribute("href");
 
-    const hash = target.getAttribute("href");
+      if (hash === "#") return;
 
-    if (hash === "#") return;
+      const elem = document.querySelector(hash);
 
-    const elem = document.querySelector(hash);
+      const coordinateElem = elem.getBoundingClientRect().top;
 
-    const coordinateElem = elem.getBoundingClientRect().top;
+      const step = (time) => {
+        if (!start) start = time;
 
-    const step = (time) => {
-      if (!start) start = time;
+        const progress = time - start;
 
-      const progress = time - start;
+        const r =
+          coordinateElem < 0
+            ? Math.max(pageY - progress / SPEED, pageY + coordinateElem)
+            : Math.min(pageY + progress / SPEED, pageY + coordinateElem);
 
-      const r =
-        coordinateElem < 0
-          ? Math.max(pageY - progress / SPEED, pageY + coordinateElem)
-          : Math.min(pageY + progress / SPEED, pageY + coordinateElem);
+        window.scrollTo(0, r);
 
-      window.scrollTo(0, r);
+        if (r < pageY + coordinateElem) requestAnimationFrame(step);
+      };
 
-      if (r < pageY + coordinateElem) requestAnimationFrame(step);
-    };
+      requestAnimationFrame(step);
+    }
+  };
+  document.body.addEventListener("click", scrolled);
+}
 
-    requestAnimationFrame(step);
-  }
-};
-document.body.addEventListener("click", scrolled);
+export default smoothScroll;
